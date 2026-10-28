@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Share Your Photos</title>
+<style>
+  :root {
+    --ink: #1f2933;
+    --muted: #616e7c;
+    --accent: #2f4b7c;
+    --accent-ink: #ffffff;
+    --bg: #ffffff;
+    --line: #d9e2ec;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; background: var(--bg); }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--ink);
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Phone-width column: the Guest Gala page is a single-column mobile layout,
+     so it needs to be tall and narrow rather than short and wide. */
+  .wrap {
+    width: 100%;
+    max-width: 480px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  iframe {
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: 0;
+    border: 0;
+  }
+
+  .links {
+    flex: 0 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    justify-content: center;
+    padding: 10px 12px;
+    border-top: 1px solid var(--line);
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .links a { color: var(--accent); }
+
+  /* Button mode (used when useIframe is false) */
+  .hero {
+    display: none;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 24px;
+    text-align: center;
+  }
+  .hero img {
+    width: 100%;
+    max-height: 260px;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+  .hero h1 { margin: 0; font-size: 28px; }
+  .hero p  { margin: 0; color: var(--muted); }
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid var(--accent);
+    border-radius: 999px;
+    color: var(--accent);
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+  }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); }
+
+  body.no-frame iframe,
+  body.no-frame .links { display: none; }
+  body.no-frame .hero  { display: flex; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <iframe id="frame" title="Photo and video upload" allow="camera; microphone; clipboard-write"></iframe>
+
+    <section class="hero" aria-label="Share your photos">
+      <img id="cover" alt="" hidden>
+      <h1 id="title"></h1>
+      <p id="subtitle"></p>
+      <a class="btn primary" data-link="upload" target="_blank" rel="noopener">Upload Photos &amp; Videos</a>
+      <a class="btn" data-link="gallery" target="_blank" rel="noopener">View Gallery</a>
+    </section>
+
+    <nav class="links" aria-label="Open in a new tab">
+      <span>Page not loading?</span>
+      <a data-link="upload" target="_blank" rel="noopener">Open the upload page</a>
+      <a data-link="gallery" target="_blank" rel="noopener">View the gallery</a>
+    </nav>
+  </div>
+
+<script>
+  // ---------- Edit these ----------
+  const CONFIG = {
+    uploadUrl:  "https://www.guestgala.com/upload/5e6d6b9a-8e66-4d8f-8b46-0f8c779228b3",
+    galleryUrl: "https://www.guestgala.com/upload/5e6d6b9a8e664d8f8b460f8c779228b3/photos",
+    useIframe:  true,   // set to false if the frame stays blank: shows buttons instead
+    title:      "Abby & Heather",
+    subtitle:   "Come inside, and meet the missuses!",
+    coverImage: ""      // optional, used in button mode: a file next to this one, e.g. "cover.jpg"
+  };
+  // --------------------------------
+
+  document.querySelectorAll("[data-link]").forEach(function (a) {
+    a.href = CONFIG[a.dataset.link + "Url"];
+  });
+
+  document.getElementById("title").textContent = CONFIG.title;
+  document.getElementById("subtitle").textContent = CONFIG.subtitle;
+
+  if (CONFIG.coverImage) {
+    var img = document.getElementById("cover");
+    img.src = CONFIG.coverImage;
+    img.hidden = false;
+  }
+
+  if (CONFIG.useIframe) {
+    document.getElementById("frame").src = CONFIG.uploadUrl;
+  } else {
+    document.body.classList.add("no-frame");
+  }
+</script>
+</body>
+</html>
